@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SQL.BOARDINFO">
+  <select id="selectBoardInfoList" resultType="bi">
+    select binum, bititle,bitext, bifile, bicredat, bimoddat, uinum  from Board_info
+  </select>
+  <select id="selectBoardInfo" resultType="bi">
+  select binum, bititle, bitext, bifile, bicredat, bimoddat, uinum from Board_info
+  where binum = #{binum}
+  </select>
+  
+  <insert id="insertBoardInfo" parameterType="bi">
+  	insert into board_info(bititle, bitext, bifile, bicredat, bimoddat, uinum)
+  	value(#{bititle},#{bitext},#{bifile}, now(), now(), 1)
+  </insert>
+  
+  <update id="updateBoardInfo" parameterType="bi">
+  	update Board_info
+  	<set>
+  		bimoddat = now(),
+  		<if test="bititle!=null">bititle=#{bititle},</if>
+  		<if test="bitext!=null">bitext=#{bitext},</if>
+  		<if test="bifile!=null">bifile=#{bifile},</if>
+  	</set>
+  	where binum = #{binum}
+  </update>
+  
+  <delete id="deleteBoardInfo" parameterType="bi">
+  	delete from Board_info
+  	where binum = #{binum}
+  </delete>
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SQL.JAPAN">
+  <select id="selectJapanList" resultType="japan" parameterType="japan">
+    select * from Japan
+    <where>
+    	<if test="jpnum!=null">jpnum=#{jpnum}</if>
+    	<if test="jpname!=null">and jpname=#{jpname}</if>
+		<if test="jpdesc!=null">and jpdesc=#{jpdesc}</if>
+    </where>
+  </select>
+  
+  <select id="selectJapan" resultType="japan">
+  	select * from japan
+  	where jpnum = #{jpnum}
+  </select>
+    
+  <insert id="insertJapan" parameterType="japan">
+  	insert into japan(jpname, jpdesc)
+  	values(#{jpname}, #{jpdesc})
+  </insert>
+  
+  <delete id="deleteJapan" parameterType="int">
+  	delete from japan where jpnum = #{jpnum}
+  </delete>
+  
+  <update id="updateJapan" parameterType="japan">
+	update japan
+	<set>
+		<if test="jpname!=null">jpname=#{jpname},</if>
+		<if test="jpdesc!=null">jpdesc=#{jpdesc},</if>
+	</set>  
+	where jpnum=#{jpnum}
+  </update>
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		<bean id="hikariDataSource" class="com.zaxxer.hikari.HikariDataSource">
+			<property name="jdbcUrl" value="jdbc:mariadb://localhost:3306/bdi"/>
+			<property name="username" value="bdi"/>
+			<property name="password" value="bditest"/>
+			<property name="driverClassName" value="org.mariadb.jdbc.Driver"/>
+		</bean>
+		
+		<bean id="dataSourceProxy" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+			<constructor-arg ref="hikariDataSource"/>
+			<property name="logFormatter">
+				<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+					<property name="loggingType" value="MULTI_LINE"/>
+					<property name="sqlPrefix" value="CUSTOM SQL LOG==>"></property>
+				</bean>
+			</property>
+		</bean>
+		
+		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+			<property name="dataSource" ref="dataSourceProxy"/>
+			<property name="configLocation" value="classpath:mybatis/mybatis.xml"/>
+			<property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
+		</bean>
+		
+		<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+			<constructor-arg ref="sqlSessionFactory"></constructor-arg>
+		</bean>
+</beans>
